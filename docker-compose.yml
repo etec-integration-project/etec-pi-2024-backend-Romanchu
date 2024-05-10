@@ -1,4 +1,19 @@
 services:
+
+  mysql:
+      image: mysql:latest
+      ports:
+          - 3307:3306
+      volumes:
+          - /etc/localtime:/etc/localtime:ro
+          - /etc/timezone:/etc/timezone:ro
+      restart: always
+      environment:
+          - MYSQL_ROOT_PASSWORD=1234
+          - MYSQL_DATABASE=bmustdb
+          - TZ=America/Argentina/Mendoza
+      networks:
+        - express-app
   app:
     build:
       context: .
@@ -9,7 +24,7 @@ services:
       - DATABASE_NAME=bmustdb
       - DATABASE_USERNAME=root
       - DATABASE_PASSWORD=1234
-      - DATABASE_HOST=192.168.42.86
+      - DATABASE_HOST=mysql
     networks:
       - express-app
 

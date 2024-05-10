@@ -2,15 +2,16 @@ import { DataSource } from "typeorm"
 import { Product } from "./product"
 import { User } from "./user"
 import "reflect-metadata"
+import "dotenv/config"
 
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
-    host: '192.168.42.86',
+    host: process.env.DATABASE_HOST,
     port: 3306,
-    username: 'root',
-    password: '1234',
-    database: 'bmustdb',
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
     synchronize: true,
     logging: true,
     entities: [Product, User],
