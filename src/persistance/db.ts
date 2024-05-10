@@ -6,7 +6,7 @@ import "reflect-metadata"
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
-    host: 'localhost',
+    host: '192.168.42.86',
     port: 3306,
     username: 'root',
     password: '1234',
