@@ -10,3 +10,6 @@ create user 'root'@'%' identified with mysql_native_password by '1234';
 
 grant all privileges on *.* to 'root'@'%' 
 5. Ejecutar en nuestro contenedor el comando: *docker compose up --build*
+6. Realizar un curl a las siguientes URL para verificar el funcionamiento: 
+    * http://localhost:8080
+    * http://localhost:8080/producto
