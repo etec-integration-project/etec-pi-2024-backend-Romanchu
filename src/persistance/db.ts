@@ -3,7 +3,24 @@ import { Product } from "./product"
 import { User } from "./user"
 import "reflect-metadata"
 import "dotenv/config"
+import { describe } from "node:test"
 
+
+describe("test", () => {
+    it("Deberia crear un nuevo producto", async() => {
+        const req = {
+            img: "https://sublitextil.com.ar/wp-content/uploads/2022/08/pad-gamer-Sublimable-28x60cm.png",
+            name: "Pad",
+            price: 80,
+            quantity: 1
+        }
+    const producto = require("../persistance/product")
+    const res1 = await producto.create(req)
+    expect(res1).toMatchObject(req)
+    const res2 = await producto.findById(res1.id)
+    expect(res2).toMatchObject(req)
+    })
+})
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
