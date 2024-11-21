@@ -6,7 +6,7 @@ services:
     image: mysql:latest
     container_name: mysql
     ports:
-      - 3307:3306
+      - 3307:3306  # Puedes cambiar esto si el puerto ya está en uso
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -22,7 +22,7 @@ services:
 
   backend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git
+      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del backend
     container_name: backend
     restart: always
     environment:
@@ -30,6 +30,7 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: mysql
+      DATABASE_PORT: 3306  # Este es el puerto por defecto de MySQL
     depends_on:
       - mysql
     networks:
@@ -37,25 +38,23 @@ services:
 
   frontend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git
+      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del frontend
       dockerfile: Dockerfile
     container_name: frontend
     restart: always
     environment:
       REACT_APP_API_URL: http://backend:${PORT}
-    depends_on:
-      - backend
     networks:
       - express-app
 
   nginx:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git
+      context: https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del proxy Nginx
       dockerfile: Dockerfile
     container_name: nginx
     ports:
-      - "80:80"
-    links:
+      - "8081:80"  # Expón el puerto 80 de Nginx en el 8081 de tu máquina
+    depends_on:
       - frontend
       - backend
     restart: always

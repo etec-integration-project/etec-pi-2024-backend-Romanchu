@@ -1,33 +1,25 @@
-# Usar una imagen oficial ligera de Node.js
+# Usar una imagen oficial de Node.js
 FROM node:20-alpine
 
-# Actualizar paquetes del sistema
+# Instalar dependencias necesarias
 RUN apk update && apk add bash
 
-# Crear directorios necesarios y otorgar permisos
-RUN mkdir -p /app/node_modules && chmod -R 777 /usr/local
-
-# Establecer el directorio de trabajo
+# Crear directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos de dependencias
+# Copiar archivos de la aplicación
 COPY package*.json ./
-
-# Otorgar permisos al directorio de la aplicación
-RUN chmod -R 777 /app
-
-# Establecer el usuario de Node.js
-USER node
-
-# Instalar dependencias globales y del proyecto
-RUN npm install -g npm
 RUN npm install
 
-# Copiar todo el código del backend
+# Copiar el script wait-for-it.sh
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# Copiar el resto de la aplicación
 COPY . .
 
-# Exponer el puerto del backend
+# Exponer el puerto
 EXPOSE 5000
 
-# Comando para iniciar la aplicación
-CMD ["npm", "start"]
+# Comando de inicio del contenedor
+CMD ["/wait-for-it.sh", "mysql:3306", "--", "npm", "start"]
