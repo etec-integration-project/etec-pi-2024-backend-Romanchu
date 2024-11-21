@@ -1,26 +1,9 @@
-import { DataSource } from "typeorm"
-import { Product } from "./product"
-import { User } from "./user"
-import "reflect-metadata"
-import "dotenv/config"
-import { describe } from "node:test"
-
-
-describe("test", () => {
-    it("Deberia crear un nuevo producto", async() => {
-        const req = {
-            img: "https://sublitextil.com.ar/wp-content/uploads/2022/08/pad-gamer-Sublimable-28x60cm.png",
-            name: "Pad",
-            price: 80,
-            quantity: 1
-        }
-    const producto = require("../persistance/product")
-    const res1 = await producto.create(req)
-    expect(res1).toMatchObject(req)
-    const res2 = await producto.findById(res1.id)
-    expect(res2).toMatchObject(req)
-    })
-})
+import { DataSource } from "typeorm";
+import { User } from "./user";
+import { Pedido } from "./Pedido"; // Nueva entidad Pedido
+import { ProductoPedido } from "./ProductoPedido"; // Nueva entidad ProductoPedido
+import "reflect-metadata";
+import "dotenv/config";
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
@@ -29,39 +12,42 @@ export const AppDataSource = new DataSource({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    synchronize: true,
+    synchronize: true, // Sincroniza las tablas automáticamente en la base de datos
     logging: true,
-    entities: [Product, User],
+    entities: [User, Pedido, ProductoPedido], // Incluye todas las entidades
     subscribers: [],
     migrations: []
-})
+});
 
+// Tipos para manejar productos y usuarios (puedes eliminarlos si no los usas en TypeORM)
 export type Producto = {
-    id: number
-    img: string
-    name: string
-    price: number
-    quantity: number
-}
+    id: number;
+    img: string;
+    name: string;
+    price: number;
+    quantity: number;
+};
 
 export type Usuario = {
-    id: number
-    username: string
-    email: string
-    password: string
-    password2: string
-}
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    password2: string;
+};
 
-export const db:Array <Producto> = [
+// Base de datos de prueba en memoria (si es necesario para pruebas sin conexión)
+export const db: Array<Producto> = [
     {
         id: 1,
         img: 'https://sublitextil.com.ar/wp-content/uploads/2022/08/pad-gamer-Sublimable-28x60cm.png',
         name: "Pad",
         price: 80,
         quantity: 1,
-    }]
+    }
+];
 
-export const udb:Array <Usuario> = [
+export const udb: Array<Usuario> = [
     {
         id: 1,
         username: "roma",
@@ -69,4 +55,4 @@ export const udb:Array <Usuario> = [
         password: "romanchu",
         password2: "romanchu"
     }
-]
+];

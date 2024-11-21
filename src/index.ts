@@ -1,62 +1,78 @@
 import express from 'express';
 import { AppDataSource } from './persistance/db';
 import { mainRouter } from './router/routes';
-import { Product } from './persistance/product'
-import { User } from './persistance/user';
-import  cors from 'cors';
-import {config} from 'dotenv';
+import pedidoRouter from './router/pedido.router';
+import userRouter from './router/user.router'; // Importa las rutas de usuarios
+import cors from 'cors';
+import { config } from 'dotenv';
 
+// Carga las variables de entorno desde el archivo .env
 config();
-const database = process.env.DATABASE_NAME
-console.log(database)
-const username = process.env.DATABASE_USERNAME
-console.log(username)
-const password = process.env.DATABASE_PASSWORD
-console.log(password)
-const host = process.env.DATABASE_HOST
-console.log(host)
 
+// Imprimir variables de entorno para depuración
+console.log(`Database: ${process.env.DATABASE_NAME}`);
+console.log(`Username: ${process.env.DATABASE_USERNAME}`);
+console.log(`Password: ${process.env.DATABASE_PASSWORD}`);
+console.log(`Host: ${process.env.DATABASE_HOST}`);
 
+// Crear la aplicación Express
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 5000;
 
-app.use(function(_, res, next){
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Headers", "Origins, X-Requested-With, Content-Type, Accept");
-    next();
-})
-    
+// Configuración de CORS
+app.use(
+    cors({
+        origin: 'http://localhost:3000', // Dirección del frontend
+        credentials: true, // Permitir cookies y headers
+        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+    })
+);
+
+// Middleware para parsear JSON
 app.use(express.json());
-app.use ('/' , mainRouter);
-app.use (cors());
 
+// Rutas
+app.use('/', mainRouter);
+app.use('/api/pedidos', pedidoRouter);
+app.use('/api/usuarios', userRouter); // Agrega las rutas de usuarios
 
+// Inicialización de la base de datos
 AppDataSource.initialize()
-    .then(async() => {
+    .then(async () => {
         console.log('Base de datos conectada');
 
-//productos
-        const validation_product = AppDataSource.manager.getRepository(Product)
-        const product_exist = await validation_product.find()
-        if (product_exist.length == 0){
-            const product1 = new Product('https://sublitextil.com.ar/wp-content/uploads/2022/08/pad-gamer-Sublimable-28x60cm.png',"Pad1", 500, 1000);
-            AppDataSource.manager.save([product1])
-            console.log(product_exist)
-        }
+        // Crear datos iniciales si no existen
+        await crearDatosIniciales();
 
-//usuario
-        const validation_user = AppDataSource.manager.getRepository(User)
-        const user_exist = await validation_user.find()
-        if (user_exist.length == 0){
-            const user1 = new User("Test" , "test@gmail.com", "1234", "1234")
-            AppDataSource.manager.save([user1])
-            console.log(user_exist)
-        }
+        // Iniciar el servidor
         app.listen(port, () => {
-            console.log(`Servidor: http://localhost:${port}`);
+            console.log(`Servidor corriendo en: http://localhost:${port}`);
         });
     })
-    .catch(err => {
-        throw err
+    .catch((err) => {
+        console.error('Error al inicializar la base de datos:', err);
+        process.exit(1); // Salir del proceso si ocurre un error crítico
     });
+
+// Función para crear datos iniciales
+const crearDatosIniciales = async () => {
+    try {
+        const userRepository = AppDataSource.manager.getRepository('User');
+
+        // Verificar si hay usuarios existentes
+        const userExist = await userRepository.find();
+        if (userExist.length === 0) {
+            const user1 = {
+                username: 'admin',
+                email: 'admin@example.com',
+                password: 'admin123',
+            };
+            await userRepository.save(user1);
+            console.log('Usuario inicial agregado');
+        }
+    } catch (error) {
+        console.error('Error al crear datos iniciales:', error);
+    }
+};
+
 
