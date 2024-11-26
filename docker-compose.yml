@@ -1,15 +1,8 @@
-version: '3.8'
-
 services:
 
   mysql:
     image: mysql:latest
     container_name: mysql
-    ports:
-      - 3307:3306  # Puedes cambiar esto si el puerto ya está en uso
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
@@ -22,15 +15,15 @@ services:
 
   backend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del backend
+      context: './https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git'  # Cambia la URL para apuntar a la carpeta local del backend
     container_name: backend
     restart: always
     environment:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_HOST: mysql
-      DATABASE_PORT: 3306  # Este es el puerto por defecto de MySQL
+      DATABASE_HOST: mysql  # MySQL service name in Docker Compose
+      DATABASE_PORT: 3306  # MySQL default port
     depends_on:
       - mysql
     networks:
@@ -38,18 +31,18 @@ services:
 
   frontend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del frontend
+      context: './https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git'  # Cambia la URL para apuntar a la carpeta local del frontend
       dockerfile: Dockerfile
     container_name: frontend
     restart: always
     environment:
-      REACT_APP_API_URL: http://backend:${PORT}
+      REACT_APP_API_URL: http://backend:${PORT}  # Cambia el puerto si es necesario
     networks:
       - express-app
 
   nginx:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git  # Cambia la URL para apuntar a la carpeta local del proxy Nginx
+      context: './https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git'  # Cambia la URL para apuntar a la carpeta local del proxy Nginx
       dockerfile: Dockerfile
     container_name: nginx
     ports:

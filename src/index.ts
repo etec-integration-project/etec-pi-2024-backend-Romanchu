@@ -2,7 +2,7 @@ import express from 'express';
 import { AppDataSource } from './persistance/db';
 import { mainRouter } from './router/routes';
 import pedidoRouter from './router/pedido.router';
-import userRouter from './router/user.router'; // Importa las rutas de usuarios
+import contactoRouter from './router/contacto.router'; // Importa las rutas de contacto
 import cors from 'cors';
 import { config } from 'dotenv';
 
@@ -34,7 +34,7 @@ app.use(express.json());
 // Rutas
 app.use('/', mainRouter);
 app.use('/api/pedidos', pedidoRouter);
-app.use('/api/usuarios', userRouter); // Agrega las rutas de usuarios
+app.use('/api/contacto', contactoRouter); // Agrega las rutas de contacto
 
 // Inicialización de la base de datos
 AppDataSource.initialize()
@@ -57,22 +57,20 @@ AppDataSource.initialize()
 // Función para crear datos iniciales
 const crearDatosIniciales = async () => {
     try {
-        const userRepository = AppDataSource.manager.getRepository('User');
+        const contactoRepository = AppDataSource.manager.getRepository('Contacto');
 
-        // Verificar si hay usuarios existentes
-        const userExist = await userRepository.find();
-        if (userExist.length === 0) {
-            const user1 = {
-                username: 'admin',
-                email: 'admin@example.com',
-                password: 'admin123',
+        // Verificar si ya hay datos en la tabla de contactos
+        const contactoExist = await contactoRepository.find();
+        if (contactoExist.length === 0) {
+            const contacto1 = {
+                nombre: 'Contacto de Prueba',
+                email: 'contacto@ejemplo.com',
+                mensaje: 'Este es un mensaje de prueba',
             };
-            await userRepository.save(user1);
-            console.log('Usuario inicial agregado');
+            await contactoRepository.save(contacto1);
+            console.log('Contacto inicial agregado');
         }
     } catch (error) {
         console.error('Error al crear datos iniciales:', error);
     }
 };
-
-
