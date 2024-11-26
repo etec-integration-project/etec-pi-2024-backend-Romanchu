@@ -11,6 +11,6 @@ export class Contacto {
     @Column()
     email!: string;
 
-    @Column('text')
+    @Column()
     mensaje!: string;
 }

@@ -2,6 +2,7 @@ import { DataSource } from "typeorm";
 import { User } from "./user";
 import { Pedido } from "./Pedido"; // Nueva entidad Pedido
 import { ProductoPedido } from "./ProductoPedido"; // Nueva entidad ProductoPedido
+import { Contacto } from "./Contacto"
 import "reflect-metadata";
 import "dotenv/config";
 
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DATABASE_NAME,
     synchronize: true, // Sincroniza las tablas automáticamente en la base de datos
     logging: true,
-    entities: [User, Pedido, ProductoPedido], // Incluye todas las entidades
+    entities: [User, Pedido, ProductoPedido, Contacto], // Incluye todas las entidades
     subscribers: [],
     migrations: []
 });
