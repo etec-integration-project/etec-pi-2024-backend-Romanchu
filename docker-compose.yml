@@ -1,10 +1,12 @@
+version: '3.8'
+
 services:
 
   mysql:
     image: mysql:latest
     container_name: mysql
     ports:
-      - 3307:3306  # Puedes cambiar este puerto si el puerto ya está en uso
+      - 3307:3306  # Puedes cambiar esto si el puerto ya está en uso
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -12,15 +14,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
       TZ: America/Argentina/Mendoza
     networks:
       - express-app
 
   backend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git  # URL del repositorio del backend
+      context: https://github.com/etec-integration-project/etec-pi-2024-backend-Romanchu.git
     container_name: backend
     restart: always
     environment:
@@ -28,7 +28,7 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: mysql
-      DATABASE_PORT: 3306
+      DATABASE_PORT: 3306  # Este es el puerto por defecto de MySQL
     depends_on:
       - mysql
     networks:
@@ -36,7 +36,7 @@ services:
 
   frontend:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git  # URL del repositorio del frontend
+      context: https://github.com/etec-integration-project/etec-pi-2024-frontend-Romanchu.git
       dockerfile: Dockerfile
     container_name: frontend
     restart: always
@@ -47,7 +47,7 @@ services:
 
   nginx:
     build:
-      context: https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git  # URL del repositorio del proxy Nginx
+      context: https://github.com/etec-integration-project/etec-pi-2024-proxy-Romanchu.git
       dockerfile: Dockerfile
     container_name: nginx
     ports:
