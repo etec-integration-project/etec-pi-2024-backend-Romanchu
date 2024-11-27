@@ -2,11 +2,11 @@ import express from 'express';
 import { AppDataSource } from './persistance/db';
 import { mainRouter } from './router/routes';
 import pedidoRouter from './router/pedido.router';
-import contactoRouter from './router/contacto.router'; // Importa las rutas de contacto
+import userRouter from './router/user.router'; // Rutas de usuarios
 import cors from 'cors';
 import { config } from 'dotenv';
 
-// Carga las variables de entorno desde el archivo .env
+// Cargar las variables de entorno
 config();
 
 // Imprimir variables de entorno para depuración
@@ -34,12 +34,15 @@ app.use(express.json());
 // Rutas
 app.use('/', mainRouter);
 app.use('/api/pedidos', pedidoRouter);
-app.use('/api/contacto', contactoRouter); // Agrega las rutas de contacto
+app.use('/api/usuarios', userRouter); // Rutas de usuarios
 
 // Inicialización de la base de datos
 AppDataSource.initialize()
     .then(async () => {
         console.log('Base de datos conectada');
+
+        // Ejecutar migraciones al iniciar la aplicación
+        await AppDataSource.runMigrations();
 
         // Crear datos iniciales si no existen
         await crearDatosIniciales();
@@ -57,18 +60,18 @@ AppDataSource.initialize()
 // Función para crear datos iniciales
 const crearDatosIniciales = async () => {
     try {
-        const contactoRepository = AppDataSource.manager.getRepository('Contacto');
+        const userRepository = AppDataSource.manager.getRepository('User');
 
-        // Verificar si ya hay datos en la tabla de contactos
-        const contactoExist = await contactoRepository.find();
-        if (contactoExist.length === 0) {
-            const contacto1 = {
-                nombre: 'Contacto de Prueba',
-                email: 'contacto@ejemplo.com',
-                mensaje: 'Este es un mensaje de prueba',
+        // Verificar si hay usuarios existentes
+        const userExist = await userRepository.find();
+        if (userExist.length === 0) {
+            const user1 = {
+                username: 'admin',
+                email: 'admin@example.com',
+                password: 'admin123',
             };
-            await contactoRepository.save(contacto1);
-            console.log('Contacto inicial agregado');
+            await userRepository.save(user1);
+            console.log('Usuario inicial agregado');
         }
     } catch (error) {
         console.error('Error al crear datos iniciales:', error);

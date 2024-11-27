@@ -6,6 +6,7 @@ import { Contacto } from "./Contacto"
 import "reflect-metadata";
 import "dotenv/config";
 
+// Configuración de la conexión a la base de datos y migraciones
 export const AppDataSource = new DataSource({
     type: 'mysql',
     host: process.env.DATABASE_HOST,
@@ -13,11 +14,11 @@ export const AppDataSource = new DataSource({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    synchronize: true, // Sincroniza las tablas automáticamente en la base de datos
+    synchronize: true, // Desactiva la sincronización automática de tablas (se manejarán por migraciones)
     logging: true,
     entities: [User, Pedido, ProductoPedido, Contacto], // Incluye todas las entidades
     subscribers: [],
-    migrations: []
+    migrations: [], // Ubicación donde se guardan las migraciones generadas
 });
 
 // Tipos para manejar productos y usuarios (puedes eliminarlos si no los usas en TypeORM)

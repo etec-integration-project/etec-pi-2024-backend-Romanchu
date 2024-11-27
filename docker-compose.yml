@@ -12,8 +12,10 @@ services:
       - /etc/timezone:/etc/timezone:ro
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: bmustdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
       TZ: America/Argentina/Mendoza
     networks:
       - express-app
@@ -28,7 +30,7 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: mysql
-      DATABASE_PORT: 3306  # Este es el puerto por defecto de MySQL
+      DATABASE_PORT: 3306  
     depends_on:
       - mysql
     networks:
