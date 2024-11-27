@@ -6,17 +6,17 @@ services:
     image: mysql:latest
     container_name: mysql
     ports:
-      - 3307:3306  # Puedes cambiar esto si el puerto ya está en uso
+      - 3307:3306  # Puerto local 3307 hacia el puerto 3306 en el contenedor
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: bmustdb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
-      TZ: America/Argentina/Mendoza
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=bmustdb
+      - MYSQL_USER=user123
+      - MYSQL_PASSWORD=userpassword
+      - TZ=America/Argentina/Mendoza
     networks:
       - express-app
 
@@ -26,13 +26,11 @@ services:
     container_name: backend
     restart: always
     environment:
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_HOST: mysql
-      DATABASE_PORT: 3306  
-    depends_on:
-      - mysql
+      - DATABASE_NAME=bmustdb
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=1234
+      - DATABASE_PORT=3306
+      - DATABASE_HOST=mysql
     networks:
       - express-app
 
@@ -42,8 +40,8 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     restart: always
-    environment:
-      REACT_APP_API_URL: http://backend:${PORT}
+    depends_on:
+      - backend
     networks:
       - express-app
 
@@ -53,7 +51,7 @@ services:
       dockerfile: Dockerfile
     container_name: nginx
     ports:
-      - "8081:80"  # Expón el puerto 80 de Nginx en el 8081 de tu máquina
+      - "8081:80"  # Exponer puerto 80 de Nginx en el puerto 8081 local
     depends_on:
       - frontend
       - backend

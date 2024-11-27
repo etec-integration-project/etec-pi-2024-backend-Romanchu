@@ -2,24 +2,24 @@ import { DataSource } from "typeorm";
 import { User } from "./user";
 import { Pedido } from "./Pedido"; // Nueva entidad Pedido
 import { ProductoPedido } from "./ProductoPedido"; // Nueva entidad ProductoPedido
-import { Contacto } from "./Contacto"
+import { Contacto } from "./Contacto";
 import "reflect-metadata";
 import "dotenv/config";
 
-// Configuración de la conexión a la base de datos y migraciones
 export const AppDataSource = new DataSource({
-    type: 'mysql',
-    host: process.env.DATABASE_HOST,
-    port: 3306,
-    username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
-    synchronize: true, // Desactiva la sincronización automática de tablas (se manejarán por migraciones)
-    logging: true,
-    entities: [User, Pedido, ProductoPedido, Contacto], // Incluye todas las entidades
-    subscribers: [],
-    migrations: [], // Ubicación donde se guardan las migraciones generadas
+  type: 'mysql',
+  host: process.env.DATABASE_HOST,
+  port: 3306,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  synchronize: true, // Esto asegura que las tablas se sincronicen automáticamente
+  logging: true,
+  entities: [User, Pedido, ProductoPedido, Contacto], // Incluye todas las entidades
+  subscribers: [],
+  migrations: []
 });
+
 
 // Tipos para manejar productos y usuarios (puedes eliminarlos si no los usas en TypeORM)
 export type Producto = {
@@ -36,6 +36,13 @@ export type Usuario = {
     email: string;
     password: string;
     password2: string;
+};
+
+export type Contact = {
+    id: number;
+    nombre: string;
+    email: string;
+    mensaje: string;
 };
 
 // Base de datos de prueba en memoria (si es necesario para pruebas sin conexión)
