@@ -20,13 +20,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Configuración de CORS
-app.use(
-    cors({
-        origin: 'http://localhost:3000', // Dirección del frontend
-        credentials: true, // Permitir cookies y headers
-        methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
-    })
-);
+app.use(cors())
 
 // Middleware para parsear JSON
 app.use(express.json());

@@ -51,7 +51,7 @@ services:
       dockerfile: Dockerfile
     container_name: nginx
     ports:
-      - "8081:80"  # Exponer puerto 80 de Nginx en el puerto 8081 local
+      - "80:80"  # Exponer puerto 80 de Nginx en el puerto 8081 local
     depends_on:
       - frontend
       - backend
