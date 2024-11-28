@@ -10,10 +10,16 @@ export class Pedido {
     fecha: Date = new Date(); // Fecha inicializada con un valor predeterminado
 
     @Column('decimal', { precision: 10, scale: 2, default: 0 })
-    total: number = 0; // Total inicializado con un valor predeterminado
+    total!: number; // Total inicializado con un valor predeterminado
 
     @OneToMany(() => ProductoPedido, (productoPedido) => productoPedido.pedido, { cascade: true })
-    productos!: ProductoPedido[]; // TypeORM manejará esta propiedad
+    productos!: string; // TypeORM manejará esta propiedad
+
+    constructor (fecha: Date, total: number, productos: string){
+        this.fecha = fecha;
+        this.total = total;
+        this.productos = productos;
+    }
 }
 
 

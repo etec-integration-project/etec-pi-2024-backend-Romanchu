@@ -1,8 +1,8 @@
 import express from 'express';
-import {registroUsuario} from '../controller/user.controller';
-import { contactoController } from '../controller/contacto.controller';
-import { obtenerPedidos } from '../controller/pedido.controller';
-import { crearPedidos } from '../controller/pedido.controller';
+import { crearUsuario } from '../controller/user.controller';
+import { crearContacto } from '../controller/contacto.controller';
+import { crearPedido, getPedidos } from '../controller/pedido.controller';
+
 const mainRouter = express.Router();
 
 mainRouter.get('/', (_, res) => {
@@ -10,9 +10,9 @@ mainRouter.get('/', (_, res) => {
 });
 
 
-mainRouter.post('/api/registro', registroUsuario);
-mainRouter.post('/api/contacto', contactoController);
-mainRouter.get('/api/pedidos', obtenerPedidos);
-mainRouter.post('/api/pedidos', crearPedidos)
+mainRouter.post('/api/registro', crearUsuario);
+mainRouter.post('/api/contacto', crearContacto);
+mainRouter.get('/api/pedidos', getPedidos);
+mainRouter.post('/api/pedidos', crearPedido)
 
 export { mainRouter };  
