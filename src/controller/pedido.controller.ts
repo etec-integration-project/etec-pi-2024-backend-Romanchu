@@ -5,11 +5,10 @@ import { Pedido } from '../persistance/Pedido';
 // Crear un pedido
 export const crearPedido = async (req: Request, res: Response) => {
     console.log("Datos: ", req.body);
-    const fecha = req.body.fecha;
     const total = req.body.total;
     const productos = req.body.productos;
     try {
-        const newPedido = new Pedido(fecha, total, productos);
+        const newPedido = new Pedido(total, productos);
         try {
             
             await AppDataSource.manager.save(newPedido);

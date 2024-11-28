@@ -34,9 +34,6 @@ AppDataSource.initialize()
     .then(async () => {
         console.log('Base de datos conectada');
 
-        // Ejecutar migraciones al iniciar la aplicación
-        await AppDataSource.runMigrations();
-
         // Crear datos iniciales si no existen
         await crearDatosIniciales();
 

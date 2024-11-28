@@ -46,13 +46,11 @@ export type Contact = {
 };
 
 // Base de datos de prueba en memoria (si es necesario para pruebas sin conexión)
-export const db: Array<Producto> = [
+export const pdb: Array<Pedido> = [
     {
         id: 1,
-        img: 'https://sublitextil.com.ar/wp-content/uploads/2022/08/pad-gamer-Sublimable-28x60cm.png',
-        name: "Pad",
-        price: 80,
-        quantity: 1,
+        total: 1,
+        productos: "Pad Olas",
     }
 ];
 

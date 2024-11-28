@@ -6,8 +6,6 @@ export class Pedido {
     @PrimaryGeneratedColumn()
     id!: number; // Inicializado automáticamente por TypeORM
 
-    @Column()
-    fecha: Date = new Date(); // Fecha inicializada con un valor predeterminado
 
     @Column('decimal', { precision: 10, scale: 2, default: 0 })
     total!: number; // Total inicializado con un valor predeterminado
@@ -15,8 +13,7 @@ export class Pedido {
     @OneToMany(() => ProductoPedido, (productoPedido) => productoPedido.pedido, { cascade: true })
     productos!: string; // TypeORM manejará esta propiedad
 
-    constructor (fecha: Date, total: number, productos: string){
-        this.fecha = fecha;
+    constructor (total: number, productos: string){
         this.total = total;
         this.productos = productos;
     }
