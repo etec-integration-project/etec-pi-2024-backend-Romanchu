@@ -1,8 +1,5 @@
 import express from 'express';
 import { AppDataSource } from './persistance/db';
-import { mainRouter } from './router/routes';
-import pedidoRouter from './router/pedido.router';
-import userRouter from './router/user.router'; // Rutas de usuarios
 import cors from 'cors';
 import { config } from 'dotenv';
 
@@ -25,10 +22,6 @@ app.use(cors())
 // Middleware para parsear JSON
 app.use(express.json());
 
-// Rutas
-app.use('/', mainRouter);
-app.use('/api/pedidos', pedidoRouter);
-app.use('/api/usuarios', userRouter); // Rutas de usuarios
 
 // Inicialización de la base de datos
 AppDataSource.initialize()
