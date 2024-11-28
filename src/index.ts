@@ -22,7 +22,7 @@ app.use(cors())
 // Middleware para parsear JSON
 app.use(express.json());
 
-
+app.post('/api/contacto')
 // Inicialización de la base de datos
 AppDataSource.initialize()
     .then(async () => {
