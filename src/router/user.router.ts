@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registroUsuario, loginUsuario } from '../controller/user.controller';
+import { registroUsuario} from '../controller/user.controller';
 
 const userRouter = Router();
 
@@ -13,15 +13,7 @@ userRouter.post('/registro', async (req, res) => {
     }
 });
 
-// Ruta para inicio de sesión
-userRouter.post('/login', async (req, res) => {
-    try {
-        await loginUsuario(req, res);
-    } catch (error) {
-        console.error('Error en la ruta /login:', error);
-        res.status(500).json({ error: 'Error en el servidor al iniciar sesión' });
-    }
-});
+
 
 export default userRouter;
 

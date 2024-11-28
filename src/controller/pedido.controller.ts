@@ -12,7 +12,7 @@ interface ProductoCarrito {
 }
 
 // Crear un pedido
-export const crearPedido = async (req: Request, res: Response): Promise<Response> => {
+export const crearPedidos = async (req: Request, res: Response): Promise<Response> => {
     const productos: ProductoCarrito[] = req.body.productos;
 
     // Validar si el carrito está vacío
