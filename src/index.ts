@@ -2,6 +2,10 @@ import express from 'express';
 import { AppDataSource } from './persistance/db';
 import cors from 'cors';
 import { config } from 'dotenv';
+import {registroUsuario} from '../src/controller/user.controller'
+import { contactoController } from '../src/controller/contacto.controller';
+import { obtenerPedidos } from '../src/controller/pedido.controller';
+import { crearPedidos } from '../src/controller/pedido.controller';
 
 // Cargar las variables de entorno
 config();
@@ -22,7 +26,10 @@ app.use(cors())
 // Middleware para parsear JSON
 app.use(express.json());
 
-app.post('/api/contacto')
+app.post('/api/registro', registroUsuario);
+app.post('/api/contacto', contactoController);
+app.get('/api/pedidos', obtenerPedidos);
+app.post('/api/pedidos', crearPedidos)
 // Inicialización de la base de datos
 AppDataSource.initialize()
     .then(async () => {
